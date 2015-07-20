@@ -1,7 +1,7 @@
 /*!
 angular-xeditable - 0.1.9
 Edit-in-place for angular.js
-Build date: 2015-03-26 
+Build date: 2015-07-20 
 */
 /**
  * Angular-xeditable module 
@@ -351,6 +351,28 @@ angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFac
     });
 }]);
 
+/*
+Angular-ui bootstrap datepicker
+http://angular-ui.github.io/bootstrap/#/datepicker
+*/
+angular.module('xeditable').directive('editableVoxDatePicker', ['editableDirectiveFactory',
+	function(editableDirectiveFactory, $compile) {
+		return editableDirectiveFactory({
+			directiveName: 'editableVoxDatePicker',
+			inputTpl: '<div></div>',
+			render: function() {
+				this.parent.render.call(this);
+
+				var datePickerWrapper = angular.element('<div vox-pick-a-date bindable="$data"></div>');
+
+				datePickerWrapper.attr('start-date', this.attrs.eStartDate);
+
+				this.inputEl.prepend(datePickerWrapper);
+				this.inputEl.removeAttr('class');
+				this.inputEl.attr('class','input-group');
+			}
+    });
+}]);
 /**
  * EditableController class. 
  * Attached to element with `editable-xxx` directive.
@@ -2200,6 +2222,7 @@ angular.module('xeditable').factory('editableThemes', function() {
           case 'editableTime':
           case 'editableMonth':
           case 'editableWeek':
+          case 'editableVoxDatePicker':
             this.inputEl.addClass('form-control');
             if(this.theme.inputClass) {
               // don`t apply `input-sm` and `input-lg` to select multiple
